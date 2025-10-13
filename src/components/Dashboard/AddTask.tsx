@@ -20,7 +20,7 @@ const AddTask = () => {
     >
       +
     </motion.button>
-    <Modal open={isOpen} onClose={() => setIsOpen(false)} />
+    <Modal open={isOpen} onClose={() => setIsOpen(false)} isEdit={false} />
   </>;
 }
 

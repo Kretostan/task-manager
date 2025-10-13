@@ -5,12 +5,13 @@ import Image from "next/image";
 type ModalHeaderProps = {
   ref: RefObject<HTMLDialogElement | null>;
   closeModal: (ref: HTMLDialogElement) => void;
+  isEdit: boolean
 };
 
-const ModalHeader = ({ ref, closeModal }: ModalHeaderProps) => {
+const ModalHeader = ({ ref, closeModal, isEdit }: ModalHeaderProps) => {
   return <div className="flex flex-col justify-center gap-4 px-8 pb-6 w-full border-b-1 border-primary/20">
     <div className="flex justify-between items-center">
-      <h3 className="title-gradient font-semibold text-2xl">Add New Task</h3>
+      <h3 className="title-gradient font-semibold text-2xl">{isEdit ? "Update": "Add New"} Task</h3>
       <motion.button
         whileHover={{ rotate: 90, backgroundColor: "var(--primary)" }}
         style={{ backgroundColor: "rgba(187, 134, 252, 0.2)" }}
@@ -18,7 +19,7 @@ const ModalHeader = ({ ref, closeModal }: ModalHeaderProps) => {
         onClick={() => ref.current && closeModal(ref.current)}
       ><Image src="/icons/close.svg" alt="Close" height="15" width="15" /></motion.button>
     </div>
-    <p className="text-sm text-text/50">Create a new task to stay organized and productive</p>
+    <p className="text-sm text-text/50">{isEdit ? "Update a task" : "Create a new task"} to stay organized and productive</p>
   </div>
 }
 

@@ -7,10 +7,9 @@ import FormField from "@/components/Auth/FormField";
 type ModalFormType = {
   newTask: ITask;
   setNewTask: React.Dispatch<React.SetStateAction<ITask>>;
-  setPriority: (priority: string) => void;
 };
 
-const ModalForm = ({ newTask, setNewTask, setPriority }: ModalFormType) => {
+const ModalForm = ({ newTask, setNewTask }: ModalFormType) => {
   return <div className="flex flex-col gap-6 px-8 w-full text-sm font-semibold">
     <FormField name="title" type="text" placeholder="Enter task title" value={newTask?.title} onChange={(e) => {
       setNewTask((prevState) => {
@@ -25,9 +24,15 @@ const ModalForm = ({ newTask, setNewTask, setPriority }: ModalFormType) => {
     <div className="flex flex-col gap-4">
       <p className="text-sm font-semibold">Priority Level</p>
       <div className="flex flex-col md:flex-row gap-4">
-        <button type="button" className="flex flex-col py-2.5 w-full bg-background ring-2 ring-warning/50 rounded-lg cursor-pointer" onClick={() => setPriority("High")}>High</button>
-        <button type="button" className="flex flex-col py-2.5 w-full bg-warning ring-2 ring-warning rounded-lg cursor-pointer" onClick={() => setPriority("Medium")}>Medium</button>
-        <button type="button" className="flex flex-col py-2.5 w-full bg-background ring-2 ring-success/30 rounded-lg cursor-pointer" onClick={() => setPriority("Low")}>Low</button>
+        <button type="button" className="flex flex-col py-2.5 w-full bg-background ring-2 ring-warning/50 rounded-lg cursor-pointer" onClick={() => setNewTask((prevState) => {
+          return {...prevState, priority: "High"};
+        })}>High</button>
+        <button type="button" className="flex flex-col py-2.5 w-full bg-warning ring-2 ring-warning rounded-lg cursor-pointer" onClick={() => setNewTask((prevState) => {
+          return {...prevState, priority: "Medium"};
+        })}>Medium</button>
+        <button type="button" className="flex flex-col py-2.5 w-full bg-background ring-2 ring-success/30 rounded-lg cursor-pointer" onClick={() => setNewTask((prevState) => {
+          return {...prevState, priority: "Low"};
+        })}>Low</button>
       </div>
     </div>
     <div className="flex flex-col md:flex-row gap-6">

@@ -46,7 +46,7 @@ const Controls = ({ task }: ControlsProps) => {
         Delete
       </motion.button>
     </div>
-    <Modal open={isOpen} onClose={() => setIsOpen(false)} task={task} />
+    <Modal open={isOpen} onClose={() => setIsOpen(false)} task={task} isEdit={true} />
   </>;
 }
 

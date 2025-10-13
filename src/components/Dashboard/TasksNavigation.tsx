@@ -20,7 +20,7 @@ const TasksNavigation = () => {
         + Add Task
       </motion.button>
     </div>
-    <Modal open={isOpen} onClose={() => setIsOpen(false)} />
+    <Modal open={isOpen} onClose={() => setIsOpen(false)} isEdit={false} />
   </>;
 }
 
