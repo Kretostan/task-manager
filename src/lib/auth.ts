@@ -5,6 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import type {NextAuthOptions} from "next-auth";
 import {connectDB} from "@/lib/database";
 import {User} from "@/models/user";
+import {Task} from "@/models/task";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -58,6 +59,17 @@ export const authOptions: NextAuthOptions = {
       }
 
       return true;
+    },
+    async session({ session }) {
+      await connectDB();
+      const user = await User.findOne({ email: session?.user?.email }).exec();
+      const tasks = await Task.find({ _id: { $in: user.tasks } }).exec();
+
+      if(session?.user && tasks && user) {
+        session.user.tasks = JSON.parse(JSON.stringify(tasks));
+        session.user.stats = JSON.parse(JSON.stringify(user.stats));
+      }
+      return session
     },
   },
   pages: {
