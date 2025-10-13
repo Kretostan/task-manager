@@ -13,8 +13,12 @@ const Controls = ({ task }: ControlsProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleDeleteTask = async () => {
-    console.log(task._id);
-    await axios.delete("/api/task/" + task._id );
+    await axios.delete("/api/task/" + task._id);
+    window.location.reload();
+  };
+
+  const handleCompleteTask = async () => {
+    await axios.post("/api/task/" + task._id);
     window.location.reload();
   };
 
@@ -23,6 +27,7 @@ const Controls = ({ task }: ControlsProps) => {
       <motion.button
         whileHover={{ y: -2 }}
         className="px-3 py-1.5 bg-success rounded-lg cursor-pointer"
+        onClick={handleCompleteTask}
       >
         Complete
       </motion.button>
