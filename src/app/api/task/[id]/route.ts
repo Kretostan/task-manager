@@ -12,7 +12,7 @@ export const POST = async (req: NextRequest, context: { params: Promise<{ id: st
     if (!user) return NextResponse.json({ error: "No user found" });
     user.stats.completed++;
     user.stats.inProgress--;
-    user.stats.rate = user.stats.completed * 100 / user.stats.total;
+    user.stats.rate = (user.stats.completed * 100 / user.stats.total).toFixed(0);
     user.save();
     await Task.findByIdAndDelete(id);
 
@@ -27,6 +27,17 @@ export const DELETE = async (req: NextRequest, context: { params: Promise<{ id: 
   try {
     await connectDB();
     const { id } = await context.params;
+    const user = await User.findOne({ tasks: { $in: id } });
+
+    user.stats.total--;
+    user.stats.inProgress--;
+    if (user.stats.total !== 0) {
+      user.stats.rate = user.stats.completed * 100 / user.stats.total;
+    } else {
+      user.stats.rate = 0;
+    }
+    await user.save();
+
     await Task.findByIdAndDelete(id).exec();
     return NextResponse.json({ success: true, message: 'Task deleted!' });
   } catch (error) {
@@ -35,8 +46,19 @@ export const DELETE = async (req: NextRequest, context: { params: Promise<{ id: 
   }
 };
 
-// export const UPDATE = async (req: NextRequest, { params }: IParams) => {
-//   const { id } = params;
-//
-//   return ;
-// }
+export const PATCH = async (req: NextRequest, context: { params: Promise<{ id: string }>}) => {
+  try {
+    const { title, description, dueDate, dueTime, priority } = await req.json();
+    const { id } = await context.params;
+    await connectDB();
+
+    const user = await User.findOne({ tasks: { $in: id } }).exec();
+    if (!user) return NextResponse.json({ error: "No user found" });
+    await Task.findByIdAndUpdate(id, { title, description, dueDate, dueTime, priority }).exec();
+
+    return NextResponse.json({ success: true, message: "Task updated" });
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({ success: false, error: "Internal Server Error" }, { status: 500 });
+  }
+};
