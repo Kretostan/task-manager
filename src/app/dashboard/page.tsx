@@ -6,7 +6,7 @@ import {authOptions} from "@/lib/auth";
 const DashboardPage = async () => {
   const session = await getServerSession(authOptions);
 
-  return <div className="relative flex flex-col gap-8 min-h-screen max-w-[1200px]">
+  return <div className="relative flex flex-col gap-8 min-h-screen max-w-[1200px] w-full">
     {session && <Overview session={session} />}
     <AddTask />
   </div>;
