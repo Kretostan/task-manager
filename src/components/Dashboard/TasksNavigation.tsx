@@ -14,7 +14,7 @@ const TasksNavigation = () => {
           y: -3,
           boxShadow: "0 0 15px var(--primary)"
         }}
-        className="px-5 py-1.5 bg-linear-to-r from-primary to-secondary rounded-3xl cursor-pointer"
+        className="px-5 py-1.5 bg-linear-to-r from-primary to-secondary rounded-3xl text-sm md:text-base cursor-pointer"
         onClick={() => setIsOpen(true)}
       >
         + Add Task
