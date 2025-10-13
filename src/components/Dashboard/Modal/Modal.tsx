@@ -14,22 +14,22 @@ type ModalProps = {
   open: boolean;
   onClose: () => void;
   task?: ITask;
+  isEdit: boolean;
 };
 
-const Modal = ({ open, onClose, task }: ModalProps) => {
+const Modal = ({ open, onClose, task, isEdit }: ModalProps) => {
   const [modalContainer, setModalContainer] = useState<HTMLElement | null>(null);
   const dialogRef = useRef<HTMLDialogElement | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const [priority, setPriority] = useState("Low");
+  const { data: session } = useSession();
   const [newTask, setNewTask] = useState<ITask>(task ? task : {
     title: "",
     description: "",
     priority: "Low",
-    dueDate: "",
-    dueTime: "",
+    dueDate: new Date().toLocaleDateString("en-CA"),
+    dueTime: "18:00",
     _id: "",
   });
-  const { data: session } = useSession();
 
   useEffect(() => {
     const modal = document.getElementById("modal");
@@ -50,12 +50,20 @@ const Modal = ({ open, onClose, task }: ModalProps) => {
     const form = event.target as HTMLFormElement;
     const formData = new FormData(form);
     const jsonData = Object.fromEntries(formData.entries());
-    const data = { ...jsonData, priority: task?.priority ? task.priority : priority, email: session?.user?.email };
+    const data = { ...jsonData, email: session?.user?.email, priority: newTask.priority };
     try {
-      const response = await axios.post("/api/task/create", data);
-      if (response.status === 201 && dialogRef.current) {
-        handleCloseModal(dialogRef.current);
-        window.location.reload();
+      if (isEdit) {
+        const response = await axios.patch("/api/task/" + task?._id, data);
+        if (response.status === 200 && dialogRef.current) {
+          handleCloseModal(dialogRef.current);
+          window.location.reload();
+        }
+      } else {
+        const response = await axios.post("/api/task/create", data);
+        if (response.status === 201 && dialogRef.current) {
+          handleCloseModal(dialogRef.current);
+          window.location.reload();
+        }
       }
     } catch {
       console.error("Error while creating task");
@@ -78,10 +86,10 @@ const Modal = ({ open, onClose, task }: ModalProps) => {
     <div className="fixed inset-0 bg-black/25 z-1050"></div>
     <dialog ref={dialogRef} onClose={onClose} className="fixed top-5 md:top-25  left-1/2 -translate-x-1/2 flex flex-col items-center gap-8 py-8 w-[90%] md:max-w-[600px] bg-neutral outline outline-primary/30 text-white rounded-2xl z-1051"
     >
-      <ModalHeader ref={dialogRef} closeModal={handleCloseModal} />
+      <ModalHeader ref={dialogRef} closeModal={handleCloseModal} isEdit={isEdit} />
       <form ref={formRef} onSubmit={handleSubmitTask} className="w-full">
-        <ModalForm newTask={newTask} setNewTask={setNewTask} setPriority={setPriority} />
-        <ModalButtons ref={dialogRef} closeModal={handleCloseModal} />
+        <ModalForm newTask={newTask} setNewTask={setNewTask}/>
+        <ModalButtons ref={dialogRef} closeModal={handleCloseModal} isEdit={isEdit} />
       </form>
     </dialog>
   </>, modalContainer);
