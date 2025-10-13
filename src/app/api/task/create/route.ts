@@ -19,7 +19,9 @@ export const POST = async (req: NextRequest) => {
     if (!user.stats) {
       user.stats = { total: 1, completed: 0, inProgress: 1, rate: 0}
     } else {
-      user.stats = {...user.stats, total: (user.stats.total || 0) + 1, inProgress: (user.stats.inProgress || 0) + 1 };
+      let progressRate = 0;
+      if (user.stats.total !== 0) progressRate = user.stats.completed * 100 / user.stats.total;
+      user.stats = {...user.stats, total: (user.stats.total || 0) + 1, inProgress: (user.stats.inProgress || 0) + 1, rate: progressRate };
     }
     await user.save();
 
