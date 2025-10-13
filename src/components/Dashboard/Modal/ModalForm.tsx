@@ -1,7 +1,7 @@
+"use client";
+import {useState} from "react";
 import {motion} from "framer-motion";
-
 import type {ITask} from "@/types/common";
-
 import FormField from "@/components/Auth/FormField";
 
 type ModalFormType = {
@@ -10,6 +10,8 @@ type ModalFormType = {
 };
 
 const ModalForm = ({ newTask, setNewTask }: ModalFormType) => {
+  const [activePriority, setActivePriority] = useState<string>("Low");
+
   return <div className="flex flex-col gap-6 px-8 w-full text-sm font-semibold">
     <FormField name="title" type="text" placeholder="Enter task title" value={newTask?.title} onChange={(e) => {
       setNewTask((prevState) => {
@@ -23,16 +25,25 @@ const ModalForm = ({ newTask, setNewTask }: ModalFormType) => {
       }}><p className="text-white">Description</p></FormField>
     <div className="flex flex-col gap-4">
       <p className="text-sm font-semibold">Priority Level</p>
-      <div className="flex flex-col md:flex-row gap-4">
-        <button type="button" className="flex flex-col py-2.5 w-full bg-background ring-2 ring-warning/50 rounded-lg cursor-pointer" onClick={() => setNewTask((prevState) => {
-          return {...prevState, priority: "High"};
-        })}>High</button>
-        <button type="button" className="flex flex-col py-2.5 w-full bg-warning ring-2 ring-warning rounded-lg cursor-pointer" onClick={() => setNewTask((prevState) => {
-          return {...prevState, priority: "Medium"};
-        })}>Medium</button>
-        <button type="button" className="flex flex-col py-2.5 w-full bg-background ring-2 ring-success/30 rounded-lg cursor-pointer" onClick={() => setNewTask((prevState) => {
-          return {...prevState, priority: "Low"};
-        })}>Low</button>
+      <div className="flex flex-col md:flex-row gap-4" key={activePriority}>
+        <motion.button whileHover={{ backgroundColor: "var(--warning-1)" }} type="button" className={`flex flex-col py-2.5 w-full ${activePriority === "High" ? "bg-warning-1" : "bg-background"} ring-2 ring-warning-1 rounded-lg cursor-pointer`} onClick={() => {
+          setActivePriority("High");
+          setNewTask((prevState) => {
+            return {...prevState, priority: "High"};
+          })
+        }}>High</motion.button>
+        <motion.button whileHover={{ backgroundColor: "var(--warning)" }} type="button" className={`flex flex-col py-2.5 w-full ${activePriority === "Medium" ? "bg-warning" : "bg-background"} bg-background ring-2 ring-warning rounded-lg cursor-pointer`} onClick={() => {
+          setActivePriority("Medium");
+          setNewTask((prevState) => {
+            return {...prevState, priority: "Medium"};
+          })
+        }}>Medium</motion.button>
+        <motion.button whileHover={{ backgroundColor: "var(--success)" }} type="button" className={`flex flex-col py-2.5 w-full ${activePriority === "Low" ? "bg-success" : "bg-background"} bg-background ring-2 ring-success/30 rounded-lg cursor-pointer`} onClick={() => {
+          setActivePriority("Low");
+          setNewTask((prevState) => {
+            return {...prevState, priority: "Low"};
+          })
+        }}>Low</motion.button>
       </div>
     </div>
     <div className="flex flex-col md:flex-row gap-6">
