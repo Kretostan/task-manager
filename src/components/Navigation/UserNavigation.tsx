@@ -1,12 +1,11 @@
 "use client";
 import {motion} from "framer-motion";
-import {signOut, useSession} from "next-auth/react";
+import {signOut} from "next-auth/react";
+import {Session} from "next-auth";
 
-const UserNavigation = () => {
-  const { data: session } = useSession();
-
-  const name = session?.user?.name?.split(" ")[0] ?? "User";
-  const firstLetter = name.split("")[0];
+const UserNavigation = ({ session }: { session: Session }) => {
+  const name = session?.user?.name?.split(" ")[0];
+  const firstLetter = name?.split("")[0];
 
   return <div className="flex items-center gap-4">
     <motion.div
@@ -20,6 +19,6 @@ const UserNavigation = () => {
       className="px-4 py-1.5 border-2 border-warning-1/40 rounded-lg text-warning-1 cursor-pointer"
       onClick={() => signOut({ callbackUrl: "/" })}>Logout</motion.button>
   </div>;
-}
+};
 
 export default UserNavigation;
