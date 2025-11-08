@@ -256,15 +256,6 @@ input[type="checkbox"]:checked::before {
   left: 3px;
 }
 
-@keyframes shimmer {
-  0% {
-    background-position: -200% -200%;
-  }
-  100% {
-    background-position: 200% 200%;
-  }
-}
-
 progress[value]::-moz-progress-bar {
   background-image:
     -moz-linear-gradient(135deg, transparent 33%, rgba(0, 0, 0, 0.1) 33%, rgba(0, 0, 0, 0.1) 66%, transparent 66%),
