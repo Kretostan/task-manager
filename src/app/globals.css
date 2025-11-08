@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-@config "../../tailwind.config.ts";
-
 :root {
   box-sizing: border-box;
   margin: 0;
@@ -32,11 +30,24 @@ body {
 }
 
 @theme inline {
-  /* TODO: Przenieść config tutaj */
-  /*--color-background: var(--background);*/
-  /*--color-foreground: var(--foreground);*/
-  /*--font-sans: var(--font-geist-sans);*/
-  /*--font-mono: var(--font-geist-mono);*/
+  --color-background: var(--background);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-tertiary: var(--tertiary);
+  --color-text: var(--text);
+  --color-neutral: var(--neutral);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-warning-1: var(--warning-1);
+
+  @keyframes shimmer {
+    from {
+      background-position-x: -200%;
+    } to {
+      background-position-x: 200%;
+    }
+  }
+  --animate-shimmer: shimmer 1.5s infinite;
 }
 
 /* Texts gradients */
